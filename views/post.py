@@ -3,5 +3,7 @@ from pydantic import BaseModel
 
 
 class PostResponse(BaseModel):
+    id: int
     title: str
-    date: datetime
+    content: str
+    published_at: datetime | None

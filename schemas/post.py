@@ -4,6 +4,6 @@ from datetime import datetime, UTC
 
 class PostRequest(BaseModel):
     title: str
-    date: datetime = datetime.now(UTC)
+    content: str
+    published_at: datetime | None = None
     published: bool = False
-    author: str = None

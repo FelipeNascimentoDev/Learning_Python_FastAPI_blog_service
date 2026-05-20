@@ -1,12 +1,23 @@
 from scalar_fastapi import get_scalar_api_reference
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from database import database, metadata, engine
 
 from controllers import post
 
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from models.post import posts   # 1. Force the execution of the 'table code' to creat it
 
+    await database.connect()
+    metadata.create_all(engine)     #  2. Create all the 'tables'
+    yield
+    await database.disconnect()
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(post.router)     # Allows the router usage on the file 'post.py' from the 'controller' folder
 
 
