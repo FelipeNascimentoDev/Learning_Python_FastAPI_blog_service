@@ -9,12 +9,12 @@ from controllers import post
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from models.post import posts   # 1. Force the execution of the 'table code' to creat it
+    from models.post import posts   # 1. Force the execution of the 'table code' to creat it 
 
-    await database.connect()
-    metadata.create_all(engine)     #  2. Create all the 'tables'
-    yield
-    await database.disconnect()
+    await database.connect()        # 2. Stablish a connection with the database 
+    metadata.create_all(engine)     # 3. Create all the 'tables' 
+    yield                           # 4. 'Freeze' the execution till the application stops running 
+    await database.disconnect()     # 5. 'Free the connection' with the database 
 
 
 app = FastAPI(lifespan=lifespan)
